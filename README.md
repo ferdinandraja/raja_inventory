@@ -38,7 +38,7 @@ my link:
 10. Deploy in adaptable
 
 ## 2.Create a diagram explaining the flow of client requests to a Django web app and its response. Also in the diagram, explain the connections between urls.py, views.py, models.py, and the HTML file(s).
-<img src="/asset/diagramPBP1final.png">
+<img src="/asset/diagramPBPfinall.png">
 
 
 ## 3.What is the purpose of a virtual environment? Can we create a Django web app without a virtual environment?
