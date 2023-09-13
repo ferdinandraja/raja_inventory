@@ -1,6 +1,6 @@
 # Assignment 2
 ## My application link
-my link:
+my link: https://blackventory.adaptable.app/main/
 
 # Explanation
 ## 1.How do you implement the checklists? Explain in a step-by-step manner (not just copy-paste from the tutorial).
