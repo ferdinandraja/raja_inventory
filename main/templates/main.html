@@ -1,6 +1,53 @@
-<h1>{{ app }}</h1>
-<h5>Name:</h5>
-<p>{{ name }}</p>
+{% extends 'base.html' %}
 
-<h5>Class:</h5>
-<p>{{ class }}</p><!-- Change it to your class -->
+{% block content %}
+<style>
+    table {
+  width: 100%;
+}
+    th{
+        text-align: left;
+    }
+    td{
+        text-align: left;
+    }
+</style>
+    <h1 style="text-align: center;">Raja Inventory</h1>
+
+    <h4 style="text-align: center;">Managed by:</h4>
+    <p style="text-align: center;">{{name}}</p>
+
+    <h4 style="text-align: center;">Class:</h4>
+    <p style="text-align: center;">{{class}}</p>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Amount</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th>Date Added</th>
+        </tr>
+    
+        {% comment %} Below is how to show the product data {% endcomment %}
+    
+        {% for product in products %}
+            <tr>
+                <td>{{product.name}}</td>
+                <td>{{product.amount}}</td>
+                <td>{{product.price}}</td>
+                <td>{{product.description}}</td>
+                <td>{{product.date_added}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    
+    <br />
+    
+    <div class="container" style="text-align: center;">
+    <a href="{% url 'main:create_product' %}">
+        <button>
+            Add New Product
+        </button>
+    </a>
+</div>
+{% endblock content %}
