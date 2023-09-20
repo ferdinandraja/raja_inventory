@@ -9,11 +9,12 @@ from django.core import serializers
 # Create your views here.
 def show_main(request):
     products = Item.objects.all()
-
+    counter = products.count
     context = {
         'name': 'Ferdinand Raja Kenedy', # Your name
         'class': 'PBP KKI', # Your PBP Class
-        'products': products
+        'products': products,
+        'counter': counter,
     }
 
     return render(request, "main.html", context)
