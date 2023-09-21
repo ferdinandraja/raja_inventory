@@ -51,5 +51,11 @@
             Add New Product
         </button>
     </a>
+    <h5 style="text-align: center;">Last login session: {{last_login}}</h5>
+    <a href="{% url 'main:logout' %}">
+        <button>
+            Logout
+        </button>
+    </a>
 </div>
 {% endblock content %}
