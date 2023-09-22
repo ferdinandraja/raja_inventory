@@ -104,3 +104,108 @@ my link: https://blackventory.adaptable.app/main/
 <img src="/asset/main.jpg">
 <img src="/asset/json.jpg">
 <img src="/asset/json2.jpg">
+
+# Assignment 4
+
+# Explanation
+## 1.What is UserCreationForm in Django? Explain its advantages and disadvantages.
+UserCreationForm is a built-in form that eases user to create a user registration form for web application. With this form, user can create a registration form without needing to code it from scratch.
+### ADVANTAGES:
+1. Simple. UsercreationForm eliminates away all complexity in creating a form in django.It comes with pre-defined fields for common user attributes such as username, password, and email, making it easy to create a basic registration form quickly.
+2. Integrated with Application System. It integrates with Django, such that when a user submits the form, a user account is created with a hashed password, and the user is automatically logged in.
+3. Customizable. Even though it provides a default settings, user can still do some customization on it.
+
+### DISADVANTAGES:
+1. Styling. UserCreationForm has limited type of styling.
+2. Basic User Attributes. It is not sufficient for more complex user profiles that require additional information. In such cases, you'll need to create custom forms and views.
+
+## 2.What is the difference between authentication and authorization in Django application? Why are both important?
+Authentication is the process of verifying the identity of a user, confirming that they are who they claim to be.Authorization, on the other hand, is the process of determining whether a user has permission to perform a specific action or access a particular resource within your application.
+
+## 3.What are cookies in website? How does Django use cookies to manage user session data?
+Cookies are small pieces of data that a web server sends to a user's web browser and are stored on the user's device. They are used to store information about the user's interactions with a website. Django uses a cookie containing a special session id to identify each browser and its associated session with the site. The actual session data is stored in the site database by default.
+## 4.Are cookies secure to use? Is there potential risk to be aware of?
+Cookies are a fundamental part of web development and can be secure when used correctly, but there are potential risks and security. It is possible to steal data from cookies if the cookies are not secured.
+
+## 5.Explain how you implemented the checklist above step-by-step (not just following the tutorial).
+1. Open `views.py` inside `main.py` folder and create a function called `register` that accepts `requests` as parameter. Don't forget to add some imports before.
+    ```
+    def register(request):
+    form = UserCreationForm()
+
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your account has been successfully created!')
+            return redirect('main:login')
+    context = {'form':form}
+    return render(request, 'register.html', context)
+    ```
+2. Create a new file called `register.html` inside `main/templates` folder, don't forget to add the routing.
+```
+{% extends 'base.html' %}
+
+{% block meta %}
+    <title>Register</title>
+{% endblock meta %}
+
+{% block content %}  
+
+<div class = "login">
+    
+    <h1>Register</h1>  
+
+        <form method="POST" >  
+            {% csrf_token %}  
+            <table>  
+                {{ form.as_table }}  
+                <tr>  
+                    <td></td>
+                    <td><input type="submit" name="submit" value="Daftar"/></td>  
+                </tr>  
+            </table>  
+        </form>
+
+    {% if messages %}  
+        <ul>   
+            {% for message in messages %}  
+                <li>{{ message }}</li>  
+                {% endfor %}  
+        </ul>   
+    {% endif %}
+
+</div>  
+
+{% endblock content %}
+```
+3. Create a logout function inside `views.py` inside `main` directory. Dont forget to also add the routing.
+```
+def logout_user(request):
+    logout(request)
+    return redirect('main:login')
+```
+4. Gives a restriction to access the main page by:
+     - import this:
+     `from django.contrib.auth.decorators import login_required`
+     -and add this code before `show_main`:
+     `@login_required(login_url='/login')`
+
+5. Import this into `views.py` in `main` directory.
+```
+import datetime
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+```
+6. Modify the `login_user` function
+7. Inside `show_main` function, add new variables inside context with `'last_login': request.COOKIES['last_login']`
+8. Modify the `logout_user` function with `response.delete_cookie('last_login')` to delete cookies after user logout.
+9. Add the llast login session in the `main.html`
+10. Import user into `models.py`
+11. Modify Item class into:
+```
+class Product(models.Model):
+   user = models.ForeignKey(User, on_delete=models.CASCADE)
+    ...
+```
+12. Modify the `show_main` and `create_products` function such that it connects user product with user id.
