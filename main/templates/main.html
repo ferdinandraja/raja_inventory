@@ -4,6 +4,8 @@
 <style>
     table {
   width: 100%;
+  border-style:solid ;
+  background-color: cadetblue;
 }
     th{
         text-align: left;
@@ -21,7 +23,7 @@
     <p style="text-align: center;">{{class}}</p>
     <br>
     <p style="text-align: center;">You have saved {{counter}} items in this application</p>
-    <table>
+    <table border="">
         <tr>
             <th>Name</th>
             <th>Amount</th>
@@ -39,6 +41,20 @@
                 <td>{{product.price}}</td>
                 <td>{{product.description}}</td>
                 <td>{{product.date_added}}</td>
+                <td>
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" name="increment" value="{{product.id}}">
+                            +
+                        </button>
+                        <button type="submit" name="decrement" value="{{product.id}}">
+                            -
+                        </button>
+                        <button type="submit" name="delete" value="{{product.id}}">
+                            Delete Item
+                        </button>
+                    </form>
+                </td>
             </tr>
         {% endfor %}
     </table>

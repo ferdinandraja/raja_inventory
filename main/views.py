@@ -19,6 +19,25 @@ from django.contrib.auth.decorators import login_required
 def show_main(request):
     products = Item.objects.filter(user=request.user)
     counter = products.count
+    if request.method =='POST':
+        if 'increment' in request.POST:
+            itemId = request.POST.get('increment')
+            things = products.get(id=itemId)
+            things.amount +=1
+            things.save()
+            return HttpResponseRedirect(reverse('main:show_main'))
+        elif 'decrement' in request.POST:
+            itemId = request.POST.get('decrement')
+            things = products.get(id=itemId)
+            things.amount -=1
+            things.save()
+            return HttpResponseRedirect(reverse('main:show_main'))
+        elif 'delete' in request.POST:
+            itemId = request.POST.get('delete')
+            things = products.get(id=itemId)
+            things.delete()
+            return HttpResponseRedirect(reverse('main:show_main'))
+
     context = {
         'name': 'Ferdinand Raja Kenedy', # Your name
         'class': 'PBP KKI', # Your PBP Class
