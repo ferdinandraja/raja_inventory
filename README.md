@@ -214,9 +214,302 @@ class Product(models.Model):
 
 # Explanation
 ## 1.Explain the purpose of some CSS element selector and when to use it.
-
+1. Type Selector
+The purpose of type selector is to target object that belongst to that element. People can use type selector to apply something into all subject of that particular element.
+Example : `td`selector only works for all `td` elements
+2. Class Selector
+The purpose of class selector is to target object that have the same class attribute. Peoplpe can use class selector to apply a modification to object that belong to the same class. Example `.city` selector only target `.city` class
+3. ID selector
+Target element that has the same single ID. Example `#myHeader` selector only targets object that have `#myHeader` id.
 ## 2.Explain some of the HTML5 tags that you know.
-
-
+`<header>` -> Represents container that contain introductory content. Commonly used to define the top section of a page.
+`<nav>` -> Define something that represents a link
+`<footer>` -> Defines a footer of a page
+`<progress>` -> Creates a progress bar for some process.
 ## 3. What are the differences between margin and padding?
+Margin is the space outside the element. So it states the radius of the element into another element outside it. On the other hand, padding is the space between the content and the border of an element. So, it states the distance between the border and the content itself. 
 ## 4.What are the differences between the CSS framework Tailwind and Bootstrap? When should we use Bootstrap rather than Tailwind, and vice versa?
+Both Tailwind and Bootstraps are a CSS framework that both provides freedom for users to beautify their website. The difference of both is most of the times, Tailwind is more flexible than Bootstrap. For example, it is easier in Tailwind to create a gradient background than Bootstrap. Even though Bootstrap is easier to understand, Tailwind offer a greater user experience as it offer a lot more customization than Bootstrap. So if you want to create a more creatively demanding web, it is more recommended to use Tailwind than Bootstrap. On the other hand you can use Bootstrap to create a quicker start with pre-designed components and a more opinionated design system.
+# Step by step:
+1. add this code inside `<head>` in `base.hmtl`:
+        ```<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">```
+2. Customize `main.html` to become like this, this code adds a navbar and beautify the main page:
+```
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .custom-btn {
+    background-color: #04364A; /* Change to your desired color */
+    color: #FFFFFF; /* Text color */
+    border: none; /* Remove border if needed */
+  }
+  .custom2-btn{
+    background-color: #DAFFFB; /* Change to your desired color */
+    color: black; /* Text color */
+    border: none; /* Remove border if needed */
+  }
+</style>
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <h3>Hi {{name}}!</h3>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent" style="text-align: right;">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="nav-link disabled" aria-disabled="true">Last login session: {{last_login}}</a>
+              </li>
+              <li><a class="nav-link disabled" aria-disabled="true">Class:{{class}}</a>
+            </li>
+        </ul>
+        </div>
+      <a class="navbar-brand" href="{% url 'main:logout' %}">Logout</a>
+    </button>
+    </div>
+</nav>
+    <h1 style="text-align: left;">Raja Inventory</h1>
+    <br>
+    <p style="text-align: center;">You have saved {{counter}} items in this application</p>
+    <table class="table table-striped table-hover">
+        <thead class="thead-dark">
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Amount</th>
+              <th scope="col">Price</th>
+              <th scope="col">Description</th>
+              <th scope="col">Date Added</th>
+              <th></th>
+            </tr>
+        </thead>
+    
+        {% comment %} Below is how to show the product data {% endcomment %}
+    
+        {% for product in products %}
+        <tbody>
+            <tr>
+                <td>{{product.name}}</td>
+                <td><form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn custom-btn btn-sm" name="decrement" value="{{product.id}}">
+                        -
+                    </button>{{product.amount}}
+                        <button type="submit" class="btn custom-btn btn-sm" name="increment" value="{{product.id}}">
+                            +
+                        </button>
+                    </div>
+                        </form>
+                </td>
+                <td>{{product.price}}</td>
+                <td>{{product.description}}</td>
+                <td>{{product.date_added}}</td>
+                <td>
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn custom-btn btn-sm" name="delete" value="{{product.id}}">
+                            Delete Item
+                        </button>
+                    </form>
+                    <a href="{% url 'main:edit_product' product.pk %}">
+                        <button class="btn custom-btn btn-sm">Edit</button>
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+        {% endfor %}
+    </table>
+    
+    <br />
+    
+    <div class="container" style="text-align: center;">
+    <a href="{% url 'main:create_product' %}">
+        <button class="btn btn-primary" type="button">
+            Add New Product
+        </button>
+    </a>
+    <a href="{% url 'main:logout' %}">
+        <button class="btn custom2-btn">
+            Logout
+        </button>
+    </a>
+</div>
+{% endblock content %}
+```
+3. Customize `login.html` to add a navbar, customize the button, use cards:
+```
+{% extends 'base.html' %}
+
+{% block meta %}
+    <title>Login</title>
+{% endblock meta %}
+
+{% block content %}
+<style>
+    bac
+</style>
+<nav class="navbar navbar-expand-lg bg-body-tertiary" style="background: #AAA;">
+    <div class="container-fluid">
+    <h1>Login</h1>
+    </div>
+</nav>
+<div class="col d-flex justify-content-center">
+<div class="card p-3 text-center" style="width: fit-content,">
+    <div class="card-header" style="background-color: #3085C3;">
+        Login
+</div>
+    <div class="card-body" style="align-content: center;">
+    <form method="POST" action="">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td>Username: </td>
+                <td><input type="text" name="username" placeholder="Username" class="form-control"></td>
+            </tr>
+                    
+            <tr>
+                <td>Password: </td>
+                <td><input type="password" name="password" placeholder="Password" class="form-control"></td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td><input class="btn btn-primary btn-block mb-4" type="submit" value="Login"></td>
+            </tr>
+        </table>
+    </form>
+</div>
+</div>
+
+</div>
+
+    {% if messages %}
+            {% for message in messages %}
+                <p align ="center">{{ message }}</p>
+            {% endfor %}
+    {% endif %}
+    <div class="text-center">
+        <p>Don't have an account yet?  <a href="{% url 'main:register' %}">Register Now!</a></p>
+    </div>
+
+</div>
+{% endblock content %}
+```
+4. Customize `register.html` such that it uses a navbar,cards, and customize the button :
+```
+{% extends 'base.html' %}
+
+{% block meta %}
+    <title>Register</title>
+{% endblock meta %}
+
+{% block content %}  
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary" style="background: #AAA;">
+    <div class="container-fluid">
+    <h1>Register</h1>
+    </div>
+    <a class="navbar-brand" href="{% url 'main:show_main'%}">Main Menu</a>
+</nav>
+<div class="col d-flex justify-content-center">
+    <div class="card p-3 text-center" style="width: fit-content,">
+        <div class="card-header" style="background-color: #3085C3;">
+            <p align="left">Register</p>
+    </div>
+        <div class="card-body" style="align-content: center;">
+        <form method="POST" >  
+            {% csrf_token %}  
+            <table>  
+                {{ form.as_table }}  
+                <tr>  
+                    <td></td>
+                    <td><input class="btn btn-primary btn-sm btn-block" type="submit" value="Register"/></td>  
+                </tr>  
+            </table>  
+        </form>
+
+    {% if messages %}  
+        <ul>   
+            {% for message in messages %}  
+                <li>{{ message }}</li>  
+                {% endfor %}  
+        </ul>   
+    {% endif %}
+
+</div>  
+
+{% endblock content %}
+```
+5. Customize `create_product.html` to uses a navbar, cards, and customize the button :
+```
+{% extends 'base.html' %} 
+
+{% block content %}
+<nav class="navbar navbar-expand-lg bg-body-tertiary" style="background: #AAA;">
+    <div class="container-fluid">
+    <h1>Add New Product</h1>
+    </div>
+    <a class="navbar-brand" href="{% url 'main:logout' %}">Logout</a>
+    <a class="navbar-brand" href="{% url 'main:show_main'%}">Main Menu</a>
+</nav>
+<div class="col d-flex justify-content-center">
+    <div class="card p-3 text-center" style="width: fit-content,">
+        <div class="card-header" style="background-color: #3085C3;">
+            <p align="left">Add Product</p>
+    </div>
+        <div class="card-body" style="align-content: center;">
+<form method="POST">
+    {% csrf_token %}
+    <table>
+        {{ form.as_table }}
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" value="Add Product" class="btn btn-primary "/>
+            </td>
+        </tr>
+    </table>
+</form>
+
+{% endblock %}
+```
+6. Customize the `edit_product.html` to uses navbar, cards, and customize the button:
+```
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<nav class="navbar navbar-expand-lg bg-body-tertiary" style="background: #AAA;">
+    <div class="container-fluid">
+    <h1>Edit Product</h1>
+    </div>
+    <a class="navbar-brand" href="{% url 'main:logout' %}">Logout</a>
+    <a class="navbar-brand" href="{% url 'main:show_main'%}">Main Menu</a>
+</nav>
+<div class="col d-flex justify-content-center">
+    <div class="card p-3 text-center" style="width: fit-content">
+        <div class="card-header" style="background-color: #3085C3;">
+            <p align="left">Edit Product</p>
+    </div>
+        <div class="card-body" style="align-content: center;">
+
+<form method="POST">
+    {% csrf_token %}
+    <table>
+        {{ form.as_table }}
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" value="Edit Product" class="btn btn-primary btn-sm btn-block"/>
+            </td>
+        </tr>
+    </table>
+</form>
+
+{% endblock %}
+```
+7. Customize the `name` in context inside `show_main` in `views.py` to become like this:
+```
+context = {
+        'name': request.user.username
+```
+Such that the name will changes depend on the user logged in
+8. Git add, commit, and push to the github.

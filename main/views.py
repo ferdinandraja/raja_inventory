@@ -39,7 +39,7 @@ def show_main(request):
             return HttpResponseRedirect(reverse('main:show_main'))
 
     context = {
-        'name': 'Ferdinand Raja Kenedy', # Your name
+        'name': request.user.username, # Your name
         'class': 'PBP KKI', # Your PBP Class
         'products': products,
         'counter': counter,
