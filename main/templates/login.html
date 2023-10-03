@@ -5,11 +5,20 @@
 {% endblock meta %}
 
 {% block content %}
-
-<div class = "login">
-
+<style>
+    bac
+</style>
+<nav class="navbar navbar-expand-lg bg-body-tertiary" style="background: #AAA;">
+    <div class="container-fluid">
     <h1>Login</h1>
-
+    </div>
+</nav>
+<div class="col d-flex justify-content-center">
+<div class="card p-3 text-center" style="width: fit-content,">
+    <div class="card-header">
+        Login
+</div>
+    <div class="card-body" style="align-content: center;">
     <form method="POST" action="">
         {% csrf_token %}
         <table>
@@ -25,21 +34,23 @@
 
             <tr>
                 <td></td>
-                <td><input class="btn login_btn" type="submit" value="Login"></td>
+                <td><input class="btn btn-primary btn-block mb-4" type="submit" value="Login"></td>
             </tr>
         </table>
     </form>
-
-    {% if messages %}
-        <ul>
-            {% for message in messages %}
-                <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}     
-        
-    Don't have an account yet? <a href="{% url 'main:register' %}">Register Now</a>
+</div>
+</div>
 
 </div>
 
+    {% if messages %}
+            {% for message in messages %}
+                <p align ="center">{{ message }}</p>
+            {% endfor %}
+    {% endif %}
+    <div class="text-center">
+        <p>Don't have an account yet?  <a href="{% url 'main:register' %}">Register Now!</a></p>
+    </div>
+
+</div>
 {% endblock content %}

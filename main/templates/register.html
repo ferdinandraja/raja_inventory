@@ -6,17 +6,25 @@
 
 {% block content %}  
 
-<div class = "login">
-    
-    <h1>Register</h1>  
-
+<nav class="navbar navbar-expand-lg bg-body-tertiary" style="background: #AAA;">
+    <div class="container-fluid">
+    <h1>Register</h1>
+    </div>
+    <a class="navbar-brand" href="{% url 'main:show_main'%}">Main Menu</a>
+</nav>
+<div class="col d-flex justify-content-center">
+    <div class="card p-3 text-center" style="width: fit-content,">
+        <div class="card-header">
+            <p align="left">Register</p>
+    </div>
+        <div class="card-body" style="align-content: center;">
         <form method="POST" >  
             {% csrf_token %}  
             <table>  
                 {{ form.as_table }}  
                 <tr>  
                     <td></td>
-                    <td><input type="submit" name="submit" value="Daftar"/></td>  
+                    <td><input class="btn btn-primary btn-sm btn-block" type="submit" value="Register"/></td>  
                 </tr>  
             </table>  
         </form>

@@ -209,3 +209,13 @@ class Product(models.Model):
     ...
 ```
 12. Modify the `show_main` and `create_products` function such that it connects user product with user id.
+
+# Assignment 5
+
+# Explanation
+## 1.Explain the purpose of some CSS element selector and when to use it.
+
+## 2.Explain some of the HTML5 tags that you know.
+
+## 3. What are the differences between margin and padding?
+## 4.What are the differences between the CSS framework Tailwind and Bootstrap? When should we use Bootstrap rather than Tailwind, and vice versa?
