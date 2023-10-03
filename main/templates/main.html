@@ -50,13 +50,11 @@
         <tbody>
             <tr>
                 <td>{{product.name}}</td>
-                <td>{{product.amount}}
-                    <form method="post">
-                        {% csrf_token %}
-                        <div class="btn-group" role="group" aria-label="Basic example">
-                        <button type="submit" class="btn custom-btn btn-sm" name="decrement" value="{{product.id}}">
-                            -
-                        </button>
+                <td><form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn custom-btn btn-sm" name="decrement" value="{{product.id}}">
+                        -
+                    </button>{{product.amount}}
                         <button type="submit" class="btn custom-btn btn-sm" name="increment" value="{{product.id}}">
                             +
                         </button>

@@ -217,5 +217,6 @@ class Product(models.Model):
 
 ## 2.Explain some of the HTML5 tags that you know.
 
+
 ## 3. What are the differences between margin and padding?
 ## 4.What are the differences between the CSS framework Tailwind and Bootstrap? When should we use Bootstrap rather than Tailwind, and vice versa?
