@@ -1,5 +1,5 @@
 import datetime
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseNotFound
 from django.urls import reverse
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
@@ -14,6 +14,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 @login_required(login_url='/login')
 def show_main(request):
@@ -114,3 +115,39 @@ def edit_product(request, id):
 
     context = {'form': form}
     return render(request, "edit_product.html", context)
+def get_product_json(request):
+    product_item = Item.objects.filter(user=request.user)
+    return HttpResponse(serializers.serialize('json', product_item))
+@csrf_exempt
+def add_product_ajax(request):
+    if request.method == 'POST':
+        name = request.POST.get("name")
+        price = request.POST.get("price")
+        description = request.POST.get("description")
+        amount = request.POST.get("amount")
+        user = request.user
+
+        new_product = Item(name=name, amount = amount, price=price, description=description, user=user)
+        new_product.save()
+
+        return HttpResponse(b"CREATED", status=201)
+
+    return HttpResponseNotFound()
+def delete_product(request, id):
+    # Get data by ID
+    product = Item.objects.get(pk=id)
+    # Delete data
+    product.delete()
+    # Return to the main page
+    return HttpResponseRedirect(reverse('main:show_main'))
+def incrementItem(request, id):
+    data = Item.objects.get(id =id)
+    data.amount +=1
+    data.save()
+    return HttpResponseRedirect(reverse('main:show_main'))
+
+def decrementItem(request, id):
+    data = Item.objects.get(id =id)
+    data.amount -=1
+    data.save()
+    return HttpResponseRedirect(reverse('main:show_main'))
