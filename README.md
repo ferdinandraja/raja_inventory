@@ -513,3 +513,156 @@ context = {
 ```
 Such that the name will changes depend on the user logged in
 8. Git add, commit, and push to the github.
+
+# Assignment 6
+
+# Explanation
+## 1. Explain the difference between asynchronous programming and synchronous programming.
+Asynchronous programming is designed to handle tasks that may take time to complete without blocking the program's execution. In this kind of program, when a task is executed, instead of waiting for it to be finish, the program continues to execute another tasks. On the other hand, synchronous programming follows a straight execution model. Which means that for this kind of program, when a task is executed, he program will wait for it to complete before moving on to the next task, unlike asynchronous program.
+## 2. In the implementation of JavaScript and AJAX, there is an implemented paradigm called the event-driven programming paradigm. Explain what this paradigm means and give one example of its implementation in this assignment.
+Event driven programming pardigm is a programming model that uses interactions from user or event to determined the flow of the program. In this kind of porgram, the program responds to user interaction or events, which will be treanslated and triggered the program to do something. In this assignment, the example is
+```
+document.getElementById("button_add").onclick = addProduct
+```
+Which means when the user click the `button_add`, the event driven approach is applied.
+
+## 3. Explain the implementation of asynchronous programming in AJAX
+Asynchronous programming in AJAX allows user to retrieve data from a server and update parts of a web page without needing to refresh the entire page. This possible because AJAX allow web to make HTTP request without blocking the main execution of the browser
+
+## 4.In this semester, the implementation of AJAX is done using the Fetch API rather than the jQuery library. Compare the two technologies and write down your opinion which technology is better to use
+To begin with, Fetch API is a part of modern Javascript and also lighter in size than jQuery. On the other hand, jQuery provides a simplified and consistent API for making AJAX requests and also needed to maintain older websites that still use it.
+In summary, for most modern web development projects, the Fetch API is the better choice due to its native support in JavaScript, Promise-based approach, and better performance. However, for legacy projects and situations where cross-browser compatibility and ease of use are critical, jQuery AJAX remains a viable option. The choice should be made based on the specific requirements of your project and the development team's expertise.
+
+## 5. Explain how you implemented the checklist above step-by-step (not just following the tutorial).
+1. Create a new function on`views.py` called `get_product_json`, `incrementItem`, `decrementItem`, and `delete_product`.
+Don't forget to do the routing for all functions on `urls.py`
+2. Create a new function on`views.py` called `add_product_ajax` that accepts request as parameter. Also add a decorator above the function. So it becomes:
+```
+@csrf_exempt
+def add_product_ajax(request):
+    if request.method == 'POST':
+        name = request.POST.get("name")
+        price = request.POST.get("price")
+        description = request.POST.get("description")
+        user = request.user
+
+        new_product = Product(name=name, price=price, description=description, user=user)
+        new_product.save()
+
+        return HttpResponse(b"CREATED", status=201)
+
+    return HttpResponseNotFound()
+```
+Don't forget to do the routing for it.
+3. Delete the previous table code inside `main.html` and add a script at the last part of the file.
+```
+    <script>
+        async function getProducts() {
+            return fetch("{% url 'main:get_product_json' %}").then((res) => res.json())
+        }
+        async function refreshProducts() {
+        document.getElementById("product_table").innerHTML = ""
+        const products = await getProducts()
+        let htmlString = `<tr>
+            <th>Name</th>
+            <th>Amount</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th>Date Added</th>
+            <th></th>
+        </tr>`
+        products.forEach((item) => {
+            htmlString += `\n
+            <body>
+            <tr>
+            <td>${item.fields.name}</td>
+            <td>
+                <a href="decrement/${item.pk}">
+                        <button class="btn custom-btn btn-sm">-</button>
+                    </a>
+                ${item.fields.amount}
+                <a href="increment/${item.pk}">
+                        <button class="btn custom-btn btn-sm">+</button>
+                    </a>
+            </td>
+            <td>${item.fields.price}</td>
+            <td>${item.fields.description}</td>
+            <td>
+                ${item.fields.date_added}
+            </td>
+            <td>
+                <a href="delete/${item.pk}">
+                        <button class="btn custom-btn btn-sm">Delete</button>
+                    </a>
+                    <a href="edit-product/${item.pk}">
+                        <button class="btn custom-btn btn-sm">Edit</button>
+                    </a>
+                </td>
+            </tr>
+        </tbody>` 
+        })
+        
+        document.getElementById("product_table").innerHTML = htmlString
+    }
+
+    refreshProducts()
+
+    function addProduct() {
+        fetch("{% url 'main:add_product_ajax' %}", {
+            method: "POST",
+            body: new FormData(document.querySelector('#form'))
+        }).then(refreshProducts)
+
+        document.getElementById("form").reset()
+        return false
+    }
+
+    document.getElementById("button_add").onclick = addProduct
+    </script>
+```
+4. Add a modal that is mean to create the table:
+```
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Add New Product</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="form" onsubmit="return false;">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="name" class="col-form-label">Name</label>
+                            <input type="text" class="form-control" id="name" name="name"></input>
+                        </div>
+                        <div class="mb-3">
+                            <label for="amount" class="col-form-label">Amount</label>
+                            <input type="number" class="form-control" id="amount" name="amount"></input>
+                        </div>
+                        <div class="mb-3">
+                            <label for="price" class="col-form-label">Price</label>
+                            <input type="number" class="form-control" id="price" name="price"></input>
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="col-form-label">Description</label>
+                            <textarea class="form-control" id="description" name="description"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="button_add" data-bs-dismiss="modal">Add Product</button>
+                </div>
+            </div>
+        </div>
+    </div>
+```
+5. Inside the `cards`, add a button for AJAX add product:
+```
+ <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Add New Product</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+```
+6. Git add, commit, and push
