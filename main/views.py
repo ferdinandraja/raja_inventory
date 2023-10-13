@@ -140,7 +140,7 @@ def decrementItem(request, id):
 def add_product_ajax(request):
     if request.method == 'POST':
         name = request.POST.get("name")
-        price = request.POST.get("category")
+        price = request.POST.get("price")
         amount = request.POST.get("amount")
         description = request.POST.get("description")
         user = request.user
