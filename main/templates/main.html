@@ -37,7 +37,7 @@
     <table class ="table table-hover table-striped" id="product_table"></table>
     <button type="button" class="btn btn-primary btn-lg btn-block" data-bs-toggle="modal" data-bs-target="#exampleModal" >Add Product by AJAX</button>
 </div>
-    <br />
+    <br/>
     
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -74,6 +74,7 @@
             </div>
         </div>
     </div>
+
     
     <script>
         async function getProducts() {
@@ -88,12 +89,14 @@
             <th>Price</th>
             <th>Description</th>
             <th>Date Added</th>
+            <th>Discount</th>
             <th></th>
         </tr>`
         products.forEach((item) => {
+            if (item.fields.discount == 'True')
             htmlString += `\n
             <body>
-            <tr>
+            <tr style = "background-color:#FFFFFF">
             <td>${item.fields.name}</td>
             <td>
                 <a href="decrement/${item.pk}">
@@ -117,8 +120,41 @@
                         <button class="btn custom-btn btn-sm">Edit</button>
                     </a>
                 </td>
+            <td>
+                </td>
             </tr>
-        </tbody>` 
+        </tbody>` ;
+        else
+        htmlString += `\n
+            <body>
+            <tr style = "background-color:#000000">
+            <td>${item.fields.name}</td>
+            <td>
+                <a href="decrement/${item.pk}">
+                        <button class="btn custom-btn btn-sm">-</button>
+                    </a>
+                ${item.fields.amount}
+                <a href="increment/${item.pk}">
+                        <button class="btn custom-btn btn-sm">+</button>
+                    </a>
+            </td>
+            <td>${item.fields.price}</td>
+            <td>${item.fields.description}</td>
+            <td>
+                ${item.fields.date_added}
+            </td>
+            <td>
+                <a href="delete/${item.pk}">
+                        <button class="btn custom-btn btn-sm">Delete</button>
+                    </a>
+                    <a href="edit-product/${item.pk}">
+                        <button class="btn custom-btn btn-sm">Edit</button>
+                    </a>
+                </td>
+            <td>
+                </td>
+            </tr>
+        </tbody>`
         })
         
         document.getElementById("product_table").innerHTML = htmlString

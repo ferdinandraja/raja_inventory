@@ -11,3 +11,4 @@ class Item(models.Model):
     price = models.IntegerField()
     description = models.TextField()
     date_added = models.DateField(auto_now_add=True)
+    is_discount = models.BooleanField(auto_created=True)
